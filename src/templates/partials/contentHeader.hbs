@@ -1,12 +1,15 @@
-<header>
-    <a href="{{ link }}"><h1 id="title">{{ title }}</h1></a>
-    <h2 id="chapter">{{ chapter }}</h2>
-</header>
 <script defer src="https://kit.fontawesome.com/64933c11ad.js" crossorigin="anonymous"></script>
 <script defer>
     function scrollToTop() {
         window.scroll({top: 0, left: 0, behavior: 'smooth'});
     }
 </script>
-<button onclick="location.href='/';" class="go-home"><i class="fas fa-home"></i></button>
-<button onclick="scrollToTop()" class="scroll-top"><i class="fas fa-angle-up"></i></button>
+<header>
+    <a href="{{ link }}"><h1 id="title">{{ title }}</h1></a>
+    <h2 id="chapter">{{ chapter }}</h2>
+    <nav class="nav-float">
+        <a onclick="scrollToTop()" class="scroll-top"><i class="fas fa-angle-up"></i></a>
+        <a onclick="location.href='/'" class="go-home"><i class="fas fa-home"></i></a>
+        <a id="next-chapter" href=""><i class="fas fa-angle-right"></i></a>
+    </nav>
+</header>

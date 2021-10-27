@@ -1,5 +1,6 @@
 const mangaName = document.URL.split('/').reverse()[1]
 const mangaChapter = document.URL.split('/').pop()
+const nextChapter = document.getElementById('next-chapter')
 
 // Call the API to get manga list data
 const fetchContentImages = (callback) => {
@@ -23,9 +24,13 @@ const fetchContentImages = (callback) => {
 const displayContent = jsonData => {
     jsonData.forEach(item => {
         const itemName = item.split('/').pop()
-        const template = `<img src="${item}" alt="${mangaName} - ${mangaChapter} - ${itemName}">`
+        const template = `<img src="${item}" alt="${mangaChapter} - ${itemName}">`
         document.getElementById('template-content').innerHTML += template
     })
+    const chapterNumber = mangaChapter.split('-').pop()
+    const nextChapterNumber = parseInt(chapterNumber) + 1
+    const nextChapterSlug = mangaChapter.split('-').slice(0, -1).concat(nextChapterNumber).join('-')
+    nextChapter.href = `/series/${mangaName}/${nextChapterSlug}`
 }
 
 fetchContentImages(displayContent)

@@ -106,22 +106,28 @@ a {
 
 #template-content{
     width: 100%;
+    font-size:0;
 }
 
 img {
     width: 100%;
 }
 
-.go-home, .scroll-top {
+.nav-float {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 99;
+    display: flex;
+}
+
+.go-home, .scroll-top, #next-chapter {
     width: 2.5rem;
     height: 2.5rem;
 }
 
-.go-home {
-    position: fixed;
-    bottom: 3rem;
-    right: 6.2rem;
-    z-index: 99;
+.go-home, .scroll-top {
+    margin-right: 1rem;
     outline: none;
     background-color: #efefef;
     border: 1px solid #efefef;
@@ -131,11 +137,7 @@ img {
     transition-property: all;
 }
 
-.scroll-top {
-    position: fixed;
-    bottom: 3rem;
-    right: 3rem;
-    z-index: 99;
+#next-chapter {
     outline: none;
     background-color: #efefef;
     border: 1px solid #efefef;
@@ -145,7 +147,7 @@ img {
     transition-property: all;
 }
 
-.go-home:hover, .scroll-top:hover {
+.go-home:hover, .scroll-top:hover, #next-chapter:hover {
     transform: translateY(-0.3rem);
 }
 
@@ -156,5 +158,14 @@ img {
     #template {
         width: calc(100% - 1.6rem);
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .nav-float {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .nav-float > * {
+        margin-right: 0;
+        margin-top: 1rem;
     }
 }
