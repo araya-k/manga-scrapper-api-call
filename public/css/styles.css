@@ -48,6 +48,7 @@ h2 {
 a {
     text-decoration: none;
     cursor: pointer;
+    color: darkblue;
 }
 
 .btn {
