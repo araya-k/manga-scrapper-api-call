@@ -112,16 +112,20 @@ img {
     width: 100%;
 }
 
+.go-home, .scroll-top {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
 .go-home {
     position: fixed;
     bottom: 3rem;
-    right: 6rem;
+    right: 6.2rem;
     z-index: 99;
     outline: none;
     background-color: #efefef;
     border: 1px solid #efefef;
     cursor: pointer;
-    padding: .5rem;
     box-shadow: 0 4px 4px rgb(0, 0, 0, 20%);
     transition-duration: 0.4s;
     transition-property: all;
@@ -136,17 +140,12 @@ img {
     background-color: #efefef;
     border: 1px solid #efefef;
     cursor: pointer;
-    padding: .5rem;
     box-shadow: 0 4px 4px rgb(0, 0, 0, 20%);
     transition-duration: 0.4s;
     transition-property: all;
 }
 
-.go-home:hover {
-    transform: translateY(-0.3rem);
-}
-
-.scroll-top:hover {
+.go-home:hover, .scroll-top:hover {
     transform: translateY(-0.3rem);
 }
 
