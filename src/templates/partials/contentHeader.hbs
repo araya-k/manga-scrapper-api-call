@@ -1,0 +1,11 @@
+<header>
+    <a href="{{ link }}"><h1 id="title">{{ title }}</h1></a>
+    <h2 id="chapter">{{ chapter }}</h2>
+</header>
+<script defer>
+    function scrollToTop() {
+        window.scroll({top: 0, left: 0, behavior: 'smooth'});
+    }
+</script>
+<button onclick="location.href='/';" class="go-home">🏠</button>
+<button onclick="scrollToTop()" class="scroll-top">🡡</button>

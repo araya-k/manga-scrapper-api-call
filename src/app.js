@@ -79,6 +79,7 @@ app.get('/series/:mangaID/:chapterID', async (req, res) => {
     const chapterID = req.params.chapterID
     res.render('content', {
         title: mangaID,
+        link: `${req.protocol}://${req.get('host')}/series/${encodeURIComponent(mangaID)}`,
         chapter: chapterID
     })
 })
