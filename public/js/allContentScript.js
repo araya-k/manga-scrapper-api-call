@@ -1,5 +1,5 @@
-const mangaName = document.getElementById('title').textContent
-const mangaChapter = document.getElementById('chapter').textContent
+const mangaName = document.URL.split('/').reverse()[1]
+const mangaChapter = document.URL.split('/').pop()
 
 // Call the API to get manga list data
 const fetchContentImages = (callback) => {

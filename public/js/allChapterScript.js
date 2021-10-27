@@ -1,4 +1,4 @@
-const mangaName = document.getElementById('title').textContent
+const mangaName = document.URL.split('/').pop()
 
 // Call the API to get manga list data
 const fetchChapterList = (callback) => {
@@ -22,7 +22,7 @@ const fetchChapterList = (callback) => {
 const displayChapterDetail = jsonData => {
     jsonData.forEach(item => {
         const template = `
-        <a class="chapter-card" href="/series/${encodeURIComponent(mangaName)}/${encodeURIComponent(item.title)}">Read ${item.title}</a>
+        <a class="chapter-card" href="/series/${encodeURIComponent(mangaName)}/${encodeURIComponent(item.slug)}">Read ${item.title}</a>
         `
         document.getElementById('template').innerHTML += template
     })

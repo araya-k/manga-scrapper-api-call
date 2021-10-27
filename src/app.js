@@ -54,8 +54,13 @@ app.get('/allmanga', async (req, res) => {
 
 app.get('/series/:mangaID', async (req, res) => {
     const mangaID = req.params.mangaID
+    const mangaTitleArray = mangaID.split('-')
+    for (let i = 0; i < mangaTitleArray.length; i++) {
+        mangaTitleArray[i] = mangaTitleArray[i].charAt(0).toUpperCase() + mangaTitleArray[i].slice(1).toLowerCase();
+    }
+    const mangaTitle = mangaTitleArray.join(' ');
     res.render('chapter', {
-        title: mangaID
+        title: mangaTitle
     })
 })
 
@@ -77,10 +82,24 @@ app.get('/allchapter/:mangaID', async (req, res) => {
 app.get('/series/:mangaID/:chapterID', async (req, res) => {
     const mangaID = req.params.mangaID
     const chapterID = req.params.chapterID
+
+    const mangaTitleArray = mangaID.split('-')
+    for (let i = 0; i < mangaTitleArray.length; i++) {
+        mangaTitleArray[i] = mangaTitleArray[i].charAt(0).toUpperCase() + mangaTitleArray[i].slice(1).toLowerCase();
+    }
+    const mangaTitle = mangaTitleArray.join(' ');
+
+    const chapterTitleArray = chapterID.split('-')
+    const chapterTitleReversed = chapterTitleArray.reverse().slice(0, 2)
+    for (let i = 0; i < chapterTitleReversed.length; i++) {
+        chapterTitleReversed[i] = chapterTitleReversed[i].charAt(0).toUpperCase() + chapterTitleReversed[i].slice(1).toLowerCase();
+    }
+    const chapterTitle = chapterTitleReversed.reverse().join(' ');
+
     res.render('content', {
-        title: mangaID,
-        link: `${req.protocol}://${req.get('host')}/series/${encodeURIComponent(mangaID)}`,
-        chapter: chapterID
+        title: mangaTitle,
+        link: `${req.protocol}://${req.get('host')}/series/${mangaID}`,
+        chapter: chapterTitle
     })
 })
 

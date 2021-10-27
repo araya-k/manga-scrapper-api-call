@@ -22,7 +22,7 @@ const displayMangaDetail = jsonData => {
         const template = `
         <div class="manga-card">
             <p class="manga-title">${item.title}</p>
-            <a class="btn" href="/series/${encodeURIComponent(item.title)}">All Chapter</a>
+            <a class="btn" href="/series/${encodeURIComponent(item.slug)}">All Chapter</a>
         </div>
         `
         document.getElementById('template').innerHTML += template
