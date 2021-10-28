@@ -1,8 +1,6 @@
-const mangaName = document.URL.split('/').pop()
-
 // Call the API to get manga list data
-const fetchChapterList = (callback) => {
-    fetch(`/allchapter/${mangaName}`, {
+const fetchFavoriteMangaList = (callback) => {
+    fetch('/favorite', {
         method: 'GET',
     })
         // Return the data from the server
@@ -19,15 +17,16 @@ const fetchChapterList = (callback) => {
 }
 
 // Make the fetched data displayed in front end
-const displayChapterDetail = jsonData => {
+const displayFavoriteMangaDetail = jsonData => {
     jsonData.forEach(item => {
-        const theTitle = item.attributes.title
-        const theLink = item.links.self
-        const template = `
-        <a class="chapter-card" href="/series/${theLink.split('/').slice(-3).join('/')}">Read ${theTitle}</a>
+        const favorite = `
+        <div class="manga-card">
+            <p class="manga-title">${item.attributes.title}</p>
+            <a class="btn" href="/series/${item.attributes.slug}">All Chapter</a>
+        </div>
         `
-        document.getElementById('template').innerHTML += template
+        document.getElementById('favorite').innerHTML += favorite
     })
 }
 
-fetchChapterList(displayChapterDetail)
+fetchFavoriteMangaList(displayFavoriteMangaDetail)

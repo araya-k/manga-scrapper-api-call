@@ -33,6 +33,15 @@ header {
     margin-bottom: .8rem;
 }
 
+.sub-heading {
+    width: calc(100% - 4rem);
+    display: flex;
+    align-items: flex-start;
+    background-color: white;
+    padding: 2rem;
+    margin-bottom: .8rem;
+}
+
 h1 {
     font-size: min(max(2.73rem, calc(2.73rem + ((1vw - 0.32rem) * 1.4625))), 3.9rem);
     line-height: min(max(3.54rem, calc(3.54rem + ((1vw - 0.32rem) * 0.95))), 4.3rem);
@@ -70,7 +79,7 @@ a {
     transform: translateY(-0.3rem);
 }
 
-#template {
+#template, #favorite {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));

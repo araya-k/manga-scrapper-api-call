@@ -21,8 +21,8 @@ const displayMangaDetail = jsonData => {
     jsonData.forEach(item => {
         const template = `
         <div class="manga-card">
-            <p class="manga-title">${item.title}</p>
-            <a class="btn" href="/series/${encodeURIComponent(item.slug)}">All Chapter</a>
+            <p class="manga-title">${item.attributes.title}</p>
+            <a class="btn" href="/series/${item.attributes.slug}">All Chapter</a>
         </div>
         `
         document.getElementById('template').innerHTML += template

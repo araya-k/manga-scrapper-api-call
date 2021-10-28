@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-const BASE_URL = 'https://manga-scrapper-for-asura-scans-website.p.rapidapi.com/'
+const BASE_URL = 'https://manga-scrapper-for-asura-scans-website.p.rapidapi.com/series/'
 
 module.exports = {
     getAllChapter: (mangaID) => axios({
