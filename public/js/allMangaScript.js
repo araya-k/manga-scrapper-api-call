@@ -19,13 +19,15 @@ const fetchMangaList = (callback) => {
 // Make the fetched data displayed in front end
 const displayMangaDetail = jsonData => {
     jsonData.forEach(item => {
-        const template = `
-        <div class="manga-card">
-            <p class="manga-title">${item.attributes.title}</p>
-            <a class="btn" href="/series/${item.attributes.slug}">All Chapter</a>
-        </div>
-        `
-        document.getElementById('template').innerHTML += template
+        if (item.attributes.title !== "") {
+            const template = `
+            <div class="manga-card">
+                <p class="manga-title">${item.attributes.title}</p>
+                <a class="btn" href="/series/${item.attributes.slug}">All Chapter</a>
+            </div>
+            `
+            document.getElementById('template').innerHTML += template
+        }
     })
 }
 
