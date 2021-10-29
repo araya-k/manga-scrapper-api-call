@@ -22,9 +22,10 @@ const fetchChapterList = (callback) => {
 const displayChapterDetail = jsonData => {
     jsonData.forEach(item => {
         const theTitle = item.attributes.title
-        const theLink = item.links.self
+        const theLink = item.attributes.slug
+        const theParent = item.relationships.seriesSlug
         const template = `
-        <a class="chapter-card" href="/series/${theLink.split('/').slice(-3).join('/')}">Read ${theTitle}</a>
+        <a class="chapter-card" href="/series/${theParent}/${theLink}">Read ${theTitle}</a>
         `
         document.getElementById('template').innerHTML += template
     })

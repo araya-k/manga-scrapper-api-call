@@ -17,7 +17,7 @@ async function fetchContentSourceUrl() {
 async function displayContent() {
     loader.style.display = 'block'
     const contentSourceData = await fetchContentSourceUrl()
-    const contentSourceUrl = await contentSourceData[0].content
+    const contentSourceUrl = await contentSourceData.contentUrl
     try {
         await contentSourceUrl.reduce(async (prev, i) => {
             await prev
