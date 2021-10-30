@@ -5,7 +5,7 @@ const hbs = require('hbs')
 const getAllMangaList = require('./utils/getAllMangaList')
 const getAllChapterList = require('./utils/getAllChapterList')
 const getAllContentImages = require('./utils/getAllContentImages')
-// const getAllFavoriteList = require('./utils/getAllFavoriteList')
+const getAllFavoriteList = require('./utils/getAllFavoriteList')
 
 // Loads env variables
 require('dotenv').config()
@@ -53,7 +53,7 @@ app.get('/allmanga', async (req, res) => {
     }
 })
 
-/*app.get('/favorite', async (req, res) => {
+app.get('/favorite', async (req, res) => {
     try {
         const favoriteDetails = await getAllFavoriteList.getAllFavorites()
 
@@ -65,7 +65,7 @@ app.get('/allmanga', async (req, res) => {
             error: "Something went wrong"
         })
     }
-})*/
+})
 
 app.get('/series/:mangaID', async (req, res) => {
     const mangaID = req.params.mangaID
