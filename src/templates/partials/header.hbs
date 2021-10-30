@@ -4,9 +4,13 @@
         window.scroll({top: 0, left: 0, behavior: 'smooth'});
     }
 </script>
-<header style="margin-bottom: 0">
-    <h1 id="title">{{ title }}</h1>
-    <h2 id="chapter">{{ chapter }}</h2>
+<header class="search-header">
+    <div class="search-container">
+        <form action="/">
+            <input type="text" placeholder="Search manga..." name="search">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
     <nav class="nav-float">
         <a onclick="scrollToTop()" class="scroll-top" style="margin-right: 0"><i class="fas fa-angle-up"></i></a>
     </nav>

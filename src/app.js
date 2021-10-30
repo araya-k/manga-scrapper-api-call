@@ -3,9 +3,9 @@ const path = require('path')
 const express = require('express')
 const hbs = require('hbs')
 const getAllMangaList = require('./utils/getAllMangaList')
+const getMangaData = require('./utils/getMangaData')
 const getAllChapterList = require('./utils/getAllChapterList')
 const getAllContentImages = require('./utils/getAllContentImages')
-const getAllFavoriteList = require('./utils/getAllFavoriteList')
 
 // Loads env variables
 require('dotenv').config()
@@ -31,6 +31,58 @@ hbs.registerPartials(partialsPath)
 // Setup static directory to serve
 app.use(express.static(path.join(__dirname, '../public')))
 
+const allMangaData = []
+const homeMangaList = []
+const homeMangaData = []
+
+async function getAllMangaData() {
+    try {
+        const allMangaRequest = await getAllMangaList.getAllManga()
+        console.log(`Fetching all manga list`)
+        const allMangaList = allMangaRequest.data
+        allMangaData.push(allMangaList)
+        return allMangaData
+    }
+    catch (err) {
+        console.error(err)
+    }
+}
+
+async function mangaListForHome() {
+    const favoriteManga = [25, 26, 27, 28, 32, 33, 35, 39, 42, 43, 44, 51, 53, 57, 60, 64, 63, 74]
+    try {
+        const allMangaList = await getAllMangaData()
+        const allMangaListObject = allMangaList[0]
+        for (const manga of allMangaListObject) {
+            if (favoriteManga.includes(manga.id)) {
+                homeMangaList.push(manga)
+            }
+        }
+        return homeMangaList
+    }
+    catch (err) {
+        console.error(err)
+    }
+}
+
+async function mangaDataForHome() {
+    const mangaRequest = await mangaListForHome()
+    for (const manga of mangaRequest) {
+        const titleRequest = manga.attributes.title
+        const urlRequest = manga.attributes.slug
+        try {
+            const mangaRequest = await getMangaData.getAllData(urlRequest)
+            console.log(`Fetching manga data for ${titleRequest}`)
+            const mangaData = mangaRequest.data
+            homeMangaData.push(mangaData)
+        }
+        catch (err) {
+            console.error(err)
+        }
+    }
+}
+mangaDataForHome()
+
 // Creates base URL route "/" and renders index view
 app.get('/', (req,res) => {
     res.render('manga', {
@@ -40,93 +92,99 @@ app.get('/', (req,res) => {
 
 // Create all-manga list endpoint
 app.get('/allmanga', async (req, res) => {
-    try {
-        const mangaDetails = await getAllMangaList.getAllManga()
-
-        return res.json(mangaDetails.data)
-    } catch(e) {
-        console.log(e)
-
-        return res.status(500).json({
-            error: "Something went wrong"
-        })
-    }
+    console.log(`Handling request from /allmanga`)
+    await res.json(homeMangaData)
 })
 
-app.get('/favorite', async (req, res) => {
-    try {
-        const favoriteDetails = await getAllFavoriteList.getAllFavorites()
-
-        return res.json(favoriteDetails.data)
-    } catch(e) {
-        console.log(e)
-
-        return res.status(500).json({
-            error: "Something went wrong"
+app.get('/series/:mangaSlug', async (req, res) => {
+    const mangaSlug = req.params.mangaSlug
+    const allMangaDataObject = await allMangaData[0]
+    const specificMangaRequest = allMangaDataObject.filter(manga => manga.attributes.slug == mangaSlug)
+    if (specificMangaRequest.length === 0) {
+        res.render('404', {
+            title: 'Requested Manga Not Found'
         })
     }
-})
-
-app.get('/series/:mangaID', async (req, res) => {
-    const mangaID = req.params.mangaID
-    const mangaTitleArray = mangaID.split('-')
-    for (let i = 0; i < mangaTitleArray.length; i++) {
-        mangaTitleArray[i] = mangaTitleArray[i].charAt(0).toUpperCase() + mangaTitleArray[i].slice(1).toLowerCase()
-    }
-    const mangaTitle = mangaTitleArray.join(' ')
+    const foundManga = specificMangaRequest[0]
+    const mangaTitle = foundManga.attributes.title
     res.render('chapter', {
         title: mangaTitle
     })
 })
 
-app.get('/allchapter/:mangaID', async (req, res) => {
-    const mangaID = req.params.mangaID
+app.get('/allchapter/:mangaSlug', async (req, res) => {
+    const mangaSlug = req.params.mangaSlug
+    console.log(`Handling request from /allchapter/${mangaSlug}`)
+    const allMangaDataObject = await allMangaData[0]
+    const specificMangaRequest = allMangaDataObject.filter(manga => manga.attributes.slug == mangaSlug)
+    if (specificMangaRequest.length === 0) {
+        return res.status(404).json({error: "Requested Manga Not Found"})
+    }
     try {
-        const chapterDetails = await getAllChapterList.getAllChapter(mangaID)
-
+        const chapterDetails = await getAllChapterList.getAllChapter(mangaSlug)
         return res.json(chapterDetails.data)
-    } catch(e) {
-        console.log(e)
-
-        return res.status(500).json({
-            error: "Something went wrong"
-        })
+    }
+    catch (err) {
+        console.error(err)
+        return res.status(500).json({error: "Something went wrong"})
     }
 })
 
-app.get('/series/:mangaID/chapter/:chapterID', async (req, res) => {
-    const mangaID = req.params.mangaID
+app.get('/series/:mangaSlug/chapter/:chapterID', async (req, res) => {
+    const mangaSlug = req.params.mangaSlug
     const chapterID = req.params.chapterID
-
-    const mangaTitleArray = mangaID.split('-')
-    for (let i = 0; i < mangaTitleArray.length; i++) {
-        mangaTitleArray[i] = mangaTitleArray[i].charAt(0).toUpperCase() + mangaTitleArray[i].slice(1).toLowerCase()
+    const allMangaDataObject = await allMangaData[0]
+    const specificMangaRequest = allMangaDataObject.filter(manga => manga.attributes.slug == mangaSlug)
+    if (specificMangaRequest.length === 0) {
+        res.render('404', {
+            title: 'Requested Manga Not Found'
+        })
     }
-    const mangaTitle = mangaTitleArray.join(' ')
+    const foundManga = specificMangaRequest[0]
+    const mangaTitle = foundManga.attributes.title
+    const chapterDetails = await getAllChapterList.getAllChapter(mangaSlug)
+    const chaptersData = chapterDetails.data
+    const specificChapterRequest = chaptersData.filter(chapter => chapter.id == chapterID)
+    if (specificChapterRequest.length === 0) {
+        res.render('404', {
+            title: 'Requested Chapter Not Found'
+        })
+    }
     const chapterTitle = `Chapter ${chapterID}`
 
     res.render('content', {
         title: mangaTitle,
-        link: `${req.protocol}://${req.get('host')}/series/${mangaID}`,
+        link: `${req.protocol}://${req.get('host')}/series/${mangaSlug}`,
         chapter: chapterTitle
     })
 })
 
-app.get('/allcontent/:mangaID/:chapterID', async (req, res) => {
-    const mangaID = req.params.mangaID
+
+app.get('/allcontent/:mangaSlug/:chapterID', async (req, res) => {
+    const mangaSlug = req.params.mangaSlug
     const chapterID = req.params.chapterID
+    console.log(`Handling request from /allcontent/${mangaSlug}/${chapterID}`)
+    const allMangaDataObject = await allMangaData[0]
+    const specificMangaRequest = allMangaDataObject.filter(manga => manga.attributes.slug == mangaSlug)
+    if (specificMangaRequest.length === 0) {
+        return res.status(404).json({error: "Requested Manga Not Found"})
+    }
+    const chapterDetails = await getAllChapterList.getAllChapter(mangaSlug)
+    const chaptersData = chapterDetails.data
+    const specificChapterRequest = chaptersData.filter(chapter => chapter.id == chapterID)
+    if (specificChapterRequest.length === 0) {
+        return res.status(404).json({error: "Requested Manga Not Found"})
+    }
     try {
-        const chapterDetails = await getAllContentImages.getAllContent(mangaID, chapterID)
-
-        return res.json(chapterDetails.data)
-    } catch(e) {
-        console.log(e)
-
-        return res.status(500).json({
-            error: "Something went wrong"
-        })
+        const chapterContent = await getAllContentImages.getAllContent(mangaSlug, chapterID)
+        return res.json(chapterContent.data)
+    }
+    catch (err) {
+        console.error(err)
+        return res.status(500).json({error: "Something went wrong"})
     }
 })
+
 
 // Catch all route, renders 404 page
 app.get('*', (req, res) => {
